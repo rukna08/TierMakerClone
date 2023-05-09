@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	SDL_Texture* image = IMG_LoadTexture(renderer, "img/berry.jpg");
+	SDL_Texture* image = IMG_LoadTexture(renderer, "img/apple.jpg");
 		
 	if(image != 0) {
 		std::cout << "Apple.jpg loaded successfully!\n";
@@ -46,31 +46,49 @@ int main(int argc, char* argv[]) {
 		std::cout << "Apple.jpg failed to load!\n";
 	}
 
-	int w, h;
-	SDL_QueryTexture(image, 0, 0, &w, &h);
 	SDL_Rect imageRect;
 	imageRect.x = 200;
 	imageRect.y = 200;
-	imageRect.w = 130;
+	imageRect.w = 100;
 	imageRect.h = 100;
+
+	SDL_Point mousePosition;
 
 	SDL_Event e;
 	bool quit = false;
 
+	bool followMousePosition = false;
+
 	while(!quit) {
 		while(SDL_PollEvent(&e)) {
 			if(e.type == SDL_QUIT) quit = true;
+			else if(e.type == SDL_MOUSEBUTTONDOWN) {
+				mousePosition.x = e.motion.x;
+				mousePosition.y = e.motion.y;
+
+				if(SDL_PointInRect(&mousePosition, &imageRect)) {
+					std::cout << "clicked inside image!\n";
+
+					followMousePosition = true;
+				}
+			} else if(e.type == SDL_MOUSEBUTTONUP) followMousePosition = false;
+
+			mousePosition.x = e.motion.x;
+			mousePosition.y = e.motion.y;
 		}
 
-		SDL_RenderClear(renderer);
+		if(followMousePosition) {
+			imageRect.x = mousePosition.x - 50;
+			imageRect.y = mousePosition.y - 50;
+		}
 
 		SDL_RenderCopy(renderer, image, 0, &imageRect);
 
 		SDL_RenderPresent(renderer);
 
-		//SDL_SetRenderDrawColor(renderer, 40, 40, 40, 40);
-
-		//SDL_RenderClear(renderer);
+		SDL_SetRenderDrawColor(renderer, 40, 40, 40, 40);
+	
+		SDL_RenderClear(renderer);
 	}
 
 	SDL_DestroyWindow(window);
