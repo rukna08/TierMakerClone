@@ -79,6 +79,10 @@ int main(int argc, char* argv[]) {
 	bool quit = false;
 
 	bool followMousePosition = false;
+	std::vector<bool> followMousePositions;
+	for(int i = 0; i < imagePaths.size(); i++) {
+		followMousePositions.push_back(false);
+	}
 
 	while(!quit) {
 		while(SDL_PollEvent(&e)) {
@@ -87,12 +91,33 @@ int main(int argc, char* argv[]) {
 				mousePosition.x = e.motion.x;
 				mousePosition.y = e.motion.y;
 
+				for(int i = 0; i < imagePaths.size(); i++) {
+					if(SDL_PointInRect(&mousePosition, &imageRects[i])) {
+						std::cout << "clicked inside image: " + i;
+						std::cout << "\n";
+
+						followMousePositions[i] = true;
+					}
+				}
+
 				if(SDL_PointInRect(&mousePosition, &imageRect)) {
 					std::cout << "clicked inside image!\n";
 
 					followMousePosition = true;
 				}
-			} else if(e.type == SDL_MOUSEBUTTONUP) followMousePosition = false;
+
+				for(int i = 0; i < imagePaths.size(); i++) {
+					if(SDL_PointInRect(&mousePosition, &imageRects[i])) {
+						followMousePositions[i] = true;
+					}
+				}
+			} else if(e.type == SDL_MOUSEBUTTONUP) {
+				followMousePosition = false;
+
+				for(int i = 0; i < imagePaths.size(); i++) {
+					followMousePositions[i] = false;
+				}
+			}
 
 			mousePosition.x = e.motion.x;
 			mousePosition.y = e.motion.y;
@@ -101,6 +126,13 @@ int main(int argc, char* argv[]) {
 		if(followMousePosition) {
 			imageRect.x = mousePosition.x - 50;
 			imageRect.y = mousePosition.y - 50;
+		}
+
+		for(int i = 0; i < imagePaths.size(); i++) {
+			if(followMousePositions[i] == true) {
+				imageRects[i].x = mousePosition.x - 50;
+				imageRects[i].y = mousePosition.y - 50;
+			}
 		}
 
 		SDL_RenderCopy(renderer, image, 0, &imageRect);
