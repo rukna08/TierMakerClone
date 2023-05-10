@@ -27,8 +27,8 @@ int main(int argc, char* argv[]) {
 	SDL_Window* window = SDL_CreateWindow("Tier Maker",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		1000,
-		800,
+		1280,
+		720,
 		0);
 
 	SDL_Surface* surface = SDL_GetWindowSurface(window);
@@ -43,24 +43,13 @@ int main(int argc, char* argv[]) {
 
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
-	SDL_Texture* image = IMG_LoadTexture(renderer, "img/apple.jpg");
-	
+	SDL_Texture* bgImage = IMG_LoadTexture(renderer, "BG.png");
+	if(bgImage != 0) std::cout << "BG Loaded successfully!\n";
+
 	std::vector<SDL_Texture*> images;
 	for(int i = 0; i < imagePaths.size(); i++) {
 		images.push_back(IMG_LoadTexture(renderer, imagePaths[i].c_str()));
 	}
-
-	if(image != 0) {
-		std::cout << "Apple.jpg loaded successfully!\n";
-	} else if(image == 0){
-		std::cout << "Apple.jpg failed to load!\n";
-	}
-
-	SDL_Rect imageRect;
-	imageRect.x = 200;
-	imageRect.y = 200;
-	imageRect.w = 100;
-	imageRect.h = 100;
 
 	std::vector<SDL_Rect> imageRects;
 	for(int i = 0; i < imagePaths.size(); i++) {
@@ -72,6 +61,12 @@ int main(int argc, char* argv[]) {
 
 		imageRects.push_back(rect);
 	}
+
+	SDL_Rect bgRect;
+	bgRect.x = 0;
+	bgRect.y = 0;
+	bgRect.w = 1280;
+	bgRect.h = 720;
 
 	SDL_Point mousePosition;
 
@@ -100,12 +95,6 @@ int main(int argc, char* argv[]) {
 					}
 				}
 
-				if(SDL_PointInRect(&mousePosition, &imageRect)) {
-					std::cout << "clicked inside image!\n";
-
-					followMousePosition = true;
-				}
-
 				for(int i = 0; i < imagePaths.size(); i++) {
 					if(SDL_PointInRect(&mousePosition, &imageRects[i])) {
 						followMousePositions[i] = true;
@@ -123,11 +112,6 @@ int main(int argc, char* argv[]) {
 			mousePosition.y = e.motion.y;
 		}
 
-		if(followMousePosition) {
-			imageRect.x = mousePosition.x - 50;
-			imageRect.y = mousePosition.y - 50;
-		}
-
 		for(int i = 0; i < imagePaths.size(); i++) {
 			if(followMousePositions[i] == true) {
 				imageRects[i].x = mousePosition.x - 50;
@@ -135,7 +119,7 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
-		SDL_RenderCopy(renderer, image, 0, &imageRect);
+		SDL_RenderCopy(renderer, bgImage, 0, &bgRect);
 
 		for(int i = 0; i < imagePaths.size(); i++) {
 			SDL_RenderCopy(renderer, images[i], 0, &imageRects[i]);
