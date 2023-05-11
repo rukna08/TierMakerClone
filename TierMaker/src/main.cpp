@@ -79,6 +79,13 @@ int main(int argc, char* argv[]) {
 		followMousePositions.push_back(false);
 	}
 
+	SDL_Rect r = {
+		.x = 170,
+		.y = 10,
+		.w = 100,
+		.h = 100
+	};
+
 	while(!quit) {
 		while(SDL_PollEvent(&e)) {
 			if(e.type == SDL_QUIT) quit = true;
@@ -104,6 +111,16 @@ int main(int argc, char* argv[]) {
 				followMousePosition = false;
 
 				for(int i = 0; i < imagePaths.size(); i++) {
+					if(followMousePositions[i] == true) {
+						if(SDL_PointInRect(&mousePosition, &r)) {
+							imageRects[i].x = r.x;
+							imageRects[i].y = r.y;
+							break;
+						}
+					}
+				}
+
+				for(int i = 0; i < imagePaths.size(); i++) {
 					followMousePositions[i] = false;
 				}
 			}
@@ -121,13 +138,17 @@ int main(int argc, char* argv[]) {
 
 		SDL_RenderCopy(renderer, bgImage, 0, &bgRect);
 
+		SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+
+		SDL_RenderDrawRect(renderer, &r);
+
 		for(int i = 0; i < imagePaths.size(); i++) {
 			SDL_RenderCopy(renderer, images[i], 0, &imageRects[i]);
 		}
 
 		SDL_RenderPresent(renderer);
 
-		SDL_SetRenderDrawColor(renderer, 40, 40, 40, 40);
+		SDL_SetRenderDrawColor(renderer, 40, 40, 40, 255);
 	
 		SDL_RenderClear(renderer);
 	}
