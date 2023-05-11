@@ -86,6 +86,26 @@ int main(int argc, char* argv[]) {
 		.h = 100
 	};
 
+	SDL_Rect r2 = {
+		.x = 170 + 110,
+		.y = 10,
+		.w = 100,
+		.h = 100
+	};
+
+	SDL_Rect slotRects[6][10];
+	
+	for(int i = 0; i < 6; i++) {
+		for(int j = 0; j < 10; j++) {
+			
+			slotRects[i][j].x = 170 + j * 110;
+			slotRects[i][j].y = 10 + i * 120;
+			slotRects[i][j].w = 100;
+			slotRects[i][j].h = 100;
+
+		}
+	}
+
 	while(!quit) {
 		while(SDL_PollEvent(&e)) {
 			if(e.type == SDL_QUIT) quit = true;
@@ -140,7 +160,16 @@ int main(int argc, char* argv[]) {
 
 		SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
 
-		SDL_RenderDrawRect(renderer, &r);
+		//SDL_RenderDrawRect(renderer, &r);
+		//SDL_RenderDrawRect(renderer, &r2);
+
+		for(int i = 0; i < 6; i++) {
+			for(int j = 0; j < 10; j++) {
+
+				SDL_RenderDrawRect(renderer, &slotRects[i][j]);
+			
+			}
+		}
 
 		for(int i = 0; i < imagePaths.size(); i++) {
 			SDL_RenderCopy(renderer, images[i], 0, &imageRects[i]);
