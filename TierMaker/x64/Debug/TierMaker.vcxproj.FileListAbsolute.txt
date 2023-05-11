@@ -1,2 +1,0 @@
-C:\Users\Ankur\Desktop\TierMaker\x64\Debug\TierMaker.exe
-C:\Users\Ankur\Desktop\TierMakerClone\TierMaker\x64\Debug\TierMaker.exe
