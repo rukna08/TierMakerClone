@@ -6,6 +6,8 @@
 #include <filesystem>
 #include <vector>
 
+#include <Windows.h>
+
 namespace fs = std::filesystem;
 
 #define DEBUG 0
@@ -171,6 +173,8 @@ int main(int argc, char* argv[]) {
 		SDL_SetRenderDrawColor(renderer, 40, 40, 40, 255);
 	
 		SDL_RenderClear(renderer);
+
+		Sleep(1);
 	}
 
 	SDL_DestroyWindow(window);
