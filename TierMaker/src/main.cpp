@@ -8,7 +8,7 @@
 
 namespace fs = std::filesystem;
 
-#define DEBUG 1
+#define DEBUG 0
 
 int main(int argc, char* argv[]) {
 	std::cout << "Tier Maker Launched!\n";
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		1280,
-		720,
+		920,
 		0);
 
 	SDL_Surface* surface = SDL_GetWindowSurface(window);
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 	for(int i = 0; i < imagePaths.size(); i++) {
 		SDL_Rect rect;
 		rect.x = i*110;
-		rect.y = 600;
+		rect.y = 750;
 		rect.w = 100;
 		rect.h = 100;
 
@@ -78,20 +78,6 @@ int main(int argc, char* argv[]) {
 	for(int i = 0; i < imagePaths.size(); i++) {
 		followMousePositions.push_back(false);
 	}
-
-	SDL_Rect r = {
-		.x = 170,
-		.y = 10,
-		.w = 100,
-		.h = 100
-	};
-
-	SDL_Rect r2 = {
-		.x = 170 + 110,
-		.y = 10,
-		.w = 100,
-		.h = 100
-	};
 
 	SDL_Rect slotRects[6][10];
 	
@@ -164,18 +150,17 @@ int main(int argc, char* argv[]) {
 
 		SDL_RenderCopy(renderer, bgImage, 0, &bgRect);
 
-		//SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+#if DEBUG
+		SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
 
-		////SDL_RenderDrawRect(renderer, &r);
-		////SDL_RenderDrawRect(renderer, &r2);
+		for(int i = 0; i < 6; i++) {
+			for(int j = 0; j < 10; j++) {
 
-		//for(int i = 0; i < 6; i++) {
-		//	for(int j = 0; j < 10; j++) {
-
-		//		SDL_RenderDrawRect(renderer, &slotRects[i][j]);
-		//	
-		//	}
-		//}
+				SDL_RenderDrawRect(renderer, &slotRects[i][j]);
+			
+			}
+		}
+#endif
 
 		for(int i = 0; i < imagePaths.size(); i++) {
 			SDL_RenderCopy(renderer, images[i], 0, &imageRects[i]);
