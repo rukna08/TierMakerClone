@@ -137,6 +137,22 @@ int main(int argc, char* argv[]) {
 				for(int i = 0; i < imagePaths.size(); i++) {
 					followMousePositions[i] = false;
 				}
+			} else if(e.type == SDL_KEYDOWN) {
+				float offset = 15;
+
+				if(e.key.keysym.sym == SDLK_LEFT) {
+					for(int i = 0; i < imagePaths.size(); i++) {
+						if(imageRects[i].y > 720) {
+							imageRects[i].x += offset;
+						}
+					}
+				} else if(e.key.keysym.sym == SDLK_RIGHT) {
+					for(int i = 0; i < imagePaths.size(); i++) {
+						if(imageRects[i].y > 720) {
+							imageRects[i].x -= offset;
+						}
+					}
+				}
 			}
 
 			mousePosition.x = e.motion.x;
@@ -170,7 +186,7 @@ int main(int argc, char* argv[]) {
 
 		SDL_RenderPresent(renderer);
 
-		SDL_SetRenderDrawColor(renderer, 40, 40, 40, 255);
+		SDL_SetRenderDrawColor(renderer, 150, 150, 150, 255);
 	
 		SDL_RenderClear(renderer);
 
