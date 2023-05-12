@@ -138,7 +138,7 @@ int main(int argc, char* argv[]) {
 					followMousePositions[i] = false;
 				}
 			} else if(e.type == SDL_KEYDOWN) {
-				float offset = 15;
+				float offset = 100;
 
 				if(e.key.keysym.sym == SDLK_LEFT) {
 					for(int i = 0; i < imagePaths.size(); i++) {
